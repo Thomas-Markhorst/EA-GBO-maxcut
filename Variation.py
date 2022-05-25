@@ -1,7 +1,8 @@
 import numpy as np
 
 from Individual import Individual
-from FitnessFunction import FitnessFunction
+from FitnessFunction import FitnessFunction, MaxCut
+
 
 def uniform_crossover(individual_a: Individual, individual_b: Individual, p = 0.5 ):
 	assert len(individual_a.genotype) == len(individual_b.genotype), "solutions should be equal in size"
@@ -49,6 +50,15 @@ def custom_crossover( fitness: FitnessFunction, individual_a: Individual, indivi
    	# Implement your custom crossover here
 	offspring_a.genotype = individual_a.genotype.copy()
 	offspring_b.genotype = individual_b.genotype.copy()
-	
+	if isinstance(fitness, MaxCut):
+		sorted_weights = sorted(fitness.weights,reverse=True)
+		for e in sorted_weights:
+			v0, v1 = e
+
+	# Ideas:
+	# look in adjacency list to see how flipping this would influence the fitness of the genotype
+	# sort the weights of edges and crossover based on that (probabilities etc)
+		# we sort the weights and take the heaviest
+
 	return [offspring_a, offspring_b]
 
