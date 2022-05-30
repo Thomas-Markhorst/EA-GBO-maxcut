@@ -1,3 +1,7 @@
+output-CustomCrossover.txt
+output-OnePointCrossover.txt
+output-UniformCrossover.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
