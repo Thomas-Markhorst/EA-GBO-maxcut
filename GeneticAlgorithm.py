@@ -18,7 +18,7 @@ class GeneticAlgorithm:
 		self.population = []
 		self.number_of_generations = 0
 		self.verbose = False
-		self.print_final_results = True 
+		self.print_final_results = True
 
 		if "verbose" in options:
 			self.verbose = options["verbose"]
@@ -45,7 +45,7 @@ class GeneticAlgorithm:
 		offspring = []
 		order = np.random.permutation(self.population_size)
 		for i in range(len(order)//2):
-			offspring = offspring + self.variation_operator(self.population[order[2*i]],self.population[order[2*i+1]])
+			offspring = offspring + self.variation_operator(self.population[order[2*i]], self.population[order[2*i+1]])
 		for individual in offspring:
 			self.fitness.evaluate(individual)
 		return offspring
@@ -71,14 +71,18 @@ class GeneticAlgorithm:
 				offspring = self.make_offspring()
 				selection = self.make_selection(offspring)
 				self.population = selection
+				
 			if( self.verbose ):
 				self.print_statistics()
+
 		except ValueToReachFoundException as exception:
 			if( self.print_final_results ):
 				print(exception)
 				print("Best fitness: {:.1f}, Nr._of_evaluations: {}".format(exception.individual.fitness, self.fitness.number_of_evaluations))
 			return exception.individual.fitness, self.fitness.number_of_evaluations
+		
 		if( self.print_final_results ):
 			self.print_statistics()
+
 		return self.get_best_fitness(), self.fitness.number_of_evaluations
 

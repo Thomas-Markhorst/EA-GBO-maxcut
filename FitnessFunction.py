@@ -15,6 +15,7 @@ class FitnessFunction:
 		if individual.fitness >= self.value_to_reach:
 			raise ValueToReachFoundException(individual)
 
+
 class OneMax(FitnessFunction):
 	def __init__( self, dimensionality ):
 		super().__init__()
@@ -24,6 +25,7 @@ class OneMax(FitnessFunction):
 	def evaluate( self, individual: Individual ):
 		individual.fitness = np.sum(individual.genotype)
 		super().evaluate(individual)
+
 
 class DeceptiveTrap(FitnessFunction):
 	def __init__( self, dimensionality ):
@@ -49,6 +51,7 @@ class DeceptiveTrap(FitnessFunction):
 			result += self.trap_function(individual.genotype[i*self.trap_size:(i+1)*self.trap_size])
 		individual.fitness = result
 		super().evaluate(individual)
+
 
 class MaxCut(FitnessFunction):
 	def __init__( self, instance_file ):
@@ -76,7 +79,7 @@ class MaxCut(FitnessFunction):
 				assert( v0 >= 0 and v0 < self.dimensionality )
 				assert( v1 >= 0 and v1 < self.dimensionality )
 				w = float(splt[2])
-				self.edge_list.append((v0,v1))
+				self.edge_list.append((v0, v1))
 				self.weights[(v0,v1)] = w
 				self.weights[(v1,v0)] = w
 				if( v0 not in self.adjacency_list ):
@@ -88,14 +91,14 @@ class MaxCut(FitnessFunction):
 			assert( len(self.edge_list) == number_of_edges )
 	
 	def read_value_to_reach( self, instance_file ):
-		bkv_file = instance_file.replace(".txt",".bkv")
+		bkv_file = instance_file.replace(".txt", ".bkv")
 		with open( bkv_file, "r" ) as f_in:
 			lines = f_in.readlines()
 			first_line = lines[0].split()
 			self.value_to_reach = float(first_line[0])
 
 	def get_weight( self, v0, v1 ):
-		if( not (v0,v1) in self.weights ):
+		if( not (v0, v1) in self.weights ):
 			return 0
 		return self.weights[(v0,v1)]
 
@@ -112,4 +115,3 @@ class MaxCut(FitnessFunction):
 
 		individual.fitness = result
 		super().evaluate(individual)
-

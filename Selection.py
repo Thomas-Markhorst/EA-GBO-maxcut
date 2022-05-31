@@ -5,13 +5,13 @@ def select_best_solution( candidates ):
 	return candidates[best_ind]
 
 def tournament_selection( population, offspring ): 
-	selection_pool = np.concatenate((population, offspring),axis=None)
+	selection_pool = np.concatenate((population, offspring), axis=None)
 	tournament_size = 4
 	assert len(selection_pool) % tournament_size == 0, "Population size should be a multiple of 2"
 	
 	selection = []
 	number_of_rounds = tournament_size//2
-	for i in range(number_of_rounds):
+	for _ in range(number_of_rounds):
 		number_of_tournaments = len(selection_pool)//tournament_size
 		order = np.random.permutation(len(selection_pool))
 		for j in range(number_of_tournaments):

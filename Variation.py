@@ -10,7 +10,7 @@ def uniform_crossover(individual_a: Individual, individual_b: Individual, p = 0.
 	offspring_a = Individual(l)
 	offspring_b = Individual(l)
     
-	m = np.random.choice((0,1), p=(p, 1-p), size=l)
+	m = np.random.choice((0, 1), p=(p, 1-p), size=l)
 	offspring_a.genotype = np.where(m, individual_a.genotype, individual_b.genotype)
 	offspring_b.genotype = np.where(1 - m, individual_a.genotype, individual_b.genotype)
 	
