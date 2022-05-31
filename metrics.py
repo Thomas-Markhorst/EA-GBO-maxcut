@@ -4,8 +4,6 @@ import numpy as np
 from GeneticAlgorithm import GeneticAlgorithm
 import FitnessFunction
 
-SET_LETTER = "A"
-
 def get_txt_instances_of_set(setLetter: str):
   txt_set_file_names = []
   # Iterate directory
@@ -16,7 +14,10 @@ def get_txt_instances_of_set(setLetter: str):
   return txt_set_file_names
 
 if __name__ == "__main__":
-  crossovers = ["UniformCrossover", "OnePointCrossover"]
+  crossovers = ["UniformCrossover", "OnePointCrossover"] # "CustomCrossover"
+
+  SET_LETTER = input('For which set do you want to generate metrics? A, B, C, D or E?\n')
+  print("Generating the metrics will take a few minutes...")
   with open("metrics/results.txt", "w") as f:
     f.write("{} {} {} {} {} {} {} {} {}\n".format("set", "instance", "crossover", "population_size", "success_percentage", "evaluations_median", "percentile10", "percentile50", "percentile90"))
 
