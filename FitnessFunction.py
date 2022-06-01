@@ -62,6 +62,7 @@ class MaxCut(FitnessFunction):
 		self.read_problem_instance(instance_file)
 		self.read_value_to_reach(instance_file)
 		self.preprocess()
+		self.cliques = []
 
 	def preprocess( self ):
 		pass
@@ -89,6 +90,9 @@ class MaxCut(FitnessFunction):
 				self.adjacency_list[v0].append(v1)
 				self.adjacency_list[v1].append(v0)
 			assert( len(self.edge_list) == number_of_edges )
+
+	def group_clique_indices(self):
+		pass
 	
 	def read_value_to_reach( self, instance_file ):
 		bkv_file = instance_file.replace(".txt", ".bkv")
