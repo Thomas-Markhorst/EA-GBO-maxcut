@@ -4,11 +4,11 @@ from GeneticAlgorithm import GeneticAlgorithm
 import FitnessFunction
 
 if __name__ == "__main__":
-	crossovers = ["CustomCrossover", "UniformCrossover", "OnePointCrossover"]
+	crossovers = ["CustomCrossover", "UniformCrossover"]
 	for cx in crossovers:
 		inst = "maxcut-instances/setE/n0000040i02.txt"
 		with open("output-{}.txt".format(cx),"w") as f:
-			population_size = 500
+			population_size = 1000
 			num_evaluations_list = []
 			num_runs = 30
 			num_success = 0
