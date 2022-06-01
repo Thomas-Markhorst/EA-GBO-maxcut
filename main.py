@@ -4,18 +4,18 @@ from GeneticAlgorithm import GeneticAlgorithm
 import FitnessFunction
 
 if __name__ == "__main__":
-	crossovers = ["CustomCrossover", "UniformCrossover"]
+	crossovers = ["UniformCrossover", "CustomCrossover"]
 	for cx in crossovers:
-		inst = "maxcut-instances/setE/n0000040i02.txt"
+		inst = "maxcut-instances/setE/n0000160i05.txt"
 		with open("output-{}.txt".format(cx),"w") as f:
-			population_size = 1000
+			population_size = 10000
 			num_evaluations_list = []
-			num_runs = 30
+			num_runs = 5
 			num_success = 0
 			
 			for i in range(num_runs):
 				fitness = FitnessFunction.MaxCut(inst)
-				genetic_algorithm = GeneticAlgorithm(fitness, population_size, variation=cx, evaluation_budget=100000, verbose=False)
+				genetic_algorithm = GeneticAlgorithm(fitness, population_size, variation=cx, evaluation_budget=400000, verbose=False)
 				best_fitness, num_evaluations = genetic_algorithm.run()
 
 				if best_fitness == fitness.value_to_reach:

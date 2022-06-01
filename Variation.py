@@ -54,26 +54,16 @@ def custom_crossover(fitness: FitnessFunction, individual_a: Individual, individ
     offspring_a.genotype = individual_a.genotype.copy()
     offspring_b.genotype = individual_b.genotype.copy()
     if isinstance(fitness, MaxCut):
-        # We want to do uniform crossover where we do not split the cliques
+        # select a clique in the chain where we do the crossover
+        clique_index_to_split = np.random.choice(len(fitness.cliques) - 1) + 1
 
-        # find all indices that are suitable for crossover cutoff point
-        indices = get_suitable_indices(fitness, l)
-
-        # pick a random index out of the found set
-        m = np.random.choice(indices)
-        # print(indices)
-        # find pair that belongs to this
-        pair = -1
-        for other in indices:
-            if other in fitness.adjacency_list[m]:
-                pair = other
-                break
-        # sorted vertex case
-        m = np.arange(l) <= min((pair, m))  # ONLY WORKS FOR D
+        m = np.zeros(l)
+        # select which nodes should be swapped with other individual
+        for clique in fitness.cliques[:clique_index_to_split]:
+            m[list(clique)] = 1
+        # combine the two genes
         offspring_a.genotype = np.where(m, individual_a.genotype, individual_b.genotype)
-        offspring_b.genotype = np.where(~m, individual_a.genotype, individual_b.genotype)
-
-        # unsorted vertex case
+        offspring_b.genotype = np.where(1 - m, individual_a.genotype, individual_b.genotype)
 
     return [offspring_a, offspring_b]
 

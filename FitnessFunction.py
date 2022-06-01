@@ -108,20 +108,23 @@ class MaxCut(FitnessFunction):
 
             # All neighbors of a normal clique member are in the same clique
             clique = set(self.adjacency_list[least_node]) | {least_node}
-            nodes = nodes - clique
-            self.cliques.append(clique)
+            nodes = nodes - clique  # remove the selected nodes from the set of remaining nodes
+            self.cliques.append(clique)  # add the nodes to the set of cliques
 
-        end_clique = min(self.cliques, key=lambda c_clique: sum([len(self.adjacency_list[node]) for node in c_clique]))
+        # This clique is either the start or end node (as that clique has the least outgoing edges)
+        edge_clique = min(self.cliques, key=lambda c_clique: sum([len(self.adjacency_list[node]) for node in c_clique]))
 
-        sorted_cliques = [end_clique]
+        sorted_cliques = [edge_clique]
         last_edge_node = None
         while len(sorted_cliques) < len(self.cliques):
             cur_clique = sorted_cliques[-1]
+            # Find the next edge node (the edge node we used to come here <last_edge_node> may not be considered)
             next_edge_node = max(cur_clique,
                                  key=lambda node: len(self.adjacency_list[node]) if node != last_edge_node else -1)
             # This is the edge node in the next clique
             edge_neighbor = (set(self.adjacency_list[next_edge_node]) - cur_clique).pop()
 
+            # we find which clique this neighbour belongs to, and add it to the ordered list of cliques
             for clique in self.cliques:
                 if edge_neighbor in clique:
                     sorted_cliques.append(clique)
