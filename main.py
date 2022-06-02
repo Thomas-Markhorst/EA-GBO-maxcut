@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from GeneticAlgorithm import GeneticAlgorithm
 import FitnessFunction
 
-instances1 = np.array([
+all_instances = np.array([
     ["A", "06i01", "maxcut-instances/setA/n0000006i01.txt"],
     ["A", "12i01", "maxcut-instances/setA/n0000012i01.txt"],
     ["A", "25i01", "maxcut-instances/setA/n0000025i01.txt"],
@@ -31,12 +31,25 @@ instances1 = np.array([
     ["E", "160i01", "maxcut-instances/setE/n0000160i01.txt"]
 ])
 
-instances = np.array([
+easy_instances = np.array([
     ["A", "06i01", "maxcut-instances/setA/n0000006i01.txt"],
     ["B", "09i01", "maxcut-instances/setB/n0000009i01.txt"],
     ["C", "06i01", "maxcut-instances/setC/n0000006i01.txt"],
     ["D", "10i01", "maxcut-instances/setD/n0000010i01.txt"],
     ["E", "10i01", "maxcut-instances/setE/n0000010i01.txt"]
+])
+
+instances = np.array([
+    ["D", "10i01", "maxcut-instances/setD/n0000010i01.txt"],
+    ["D", "20i01", "maxcut-instances/setD/n0000020i01.txt"],
+    ["D", "40i01", "maxcut-instances/setD/n0000040i01.txt"],
+    ["D", "80i01", "maxcut-instances/setD/n0000080i01.txt"],
+    ["D", "160i01", "maxcut-instances/setD/n0000160i01.txt"],
+    ["E", "10i01", "maxcut-instances/setE/n0000010i01.txt"],
+    ["E", "20i01", "maxcut-instances/setE/n0000020i01.txt"],
+    ["E", "40i01", "maxcut-instances/setE/n0000040i01.txt"],
+    ["E", "80i01", "maxcut-instances/setE/n0000080i01.txt"],
+    ["E", "160i01", "maxcut-instances/setE/n0000160i01.txt"]
 ])
 
 
@@ -50,28 +63,30 @@ class PlotResults:
         self.success_rates = [[], [], []]
         self.fitness = [[], [], []]
         self.x = [[], [], []]
-        self.xlabels = ['start']
+        self.y = [[], [], []]
+        self.xlabels = []
+        self.plot_titles = []
 
     def make_plots(self, inst_num, instance, crossovers, cx_num, median, success, fitness):
         self.median_evals[cx_num].append(median)
         self.success_rates[cx_num].append(success)
         self.fitness[cx_num].append(fitness)
-        self.x[cx_num].append(inst_num+1)
+
+        self.x[cx_num].append(inst_num)
+        self.y = [self.median_evals[cx_num], self.success_rates[cx_num], self.fitness[cx_num]]
+        self.plot_titles = ["Median evaluations of " + crossovers[cx_num], "Success rate of " + crossovers[cx_num],
+                            "Best fitness of " + crossovers[cx_num]]
 
         if cx_num == 0:
             self.xlabels.append(instance)
 
         self.fig.suptitle("Baseline results")
 
-        self.axis[0, cx_num].bar(self.x[cx_num], self.median_evals[cx_num], 0.8, color='green')
-        self.axis[0, cx_num].set_xticklabels(self.xlabels, rotation=45)
-        self.axis[0, cx_num].set_title("Median evaluations of " + crossovers[cx_num])
-        self.axis[1, cx_num].bar(self.x[cx_num], self.success_rates[cx_num], 0.8, color='green')
-        self.axis[1, cx_num].set_xticklabels(self.xlabels, rotation=45)
-        self.axis[1, cx_num].set_title("Success rate of " + crossovers[cx_num])
-        self.axis[2, cx_num].bar(self.x[cx_num], self.fitness[cx_num], 0.8, color='green')
-        self.axis[2, cx_num].set_xticklabels(self.xlabels, rotation=45)
-        self.axis[2, cx_num].set_title("Best fitness of " + crossovers[cx_num])
+        for p in range(3):
+            self.axis[p, cx_num].bar(self.x[cx_num], self.y[p], 0.8, color='green')
+            self.axis[p, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
+            self.axis[p, cx_num].tick_params(rotation=45)
+            self.axis[p, cx_num].set_title(self.plot_titles[p])
 
         plt.tight_layout()
         plt.draw()
