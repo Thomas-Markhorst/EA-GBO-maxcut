@@ -55,15 +55,15 @@ instances = np.array([
 
 class PlotResults:
 
-    def __init__(self, n, crossovers):
+    def __init__(self, crossovers):
         self.fig, self.axis = plt.subplots(3, 3, figsize=(12, 6), dpi=100)
         plt.ion()
         self.fig.show()
-        self.median_evals = [[], [], []]
-        self.success_rates = [[], [], []]
-        self.fitness = [[], [], []]
-        self.x = [[], [], []]
-        self.y = [[], [], []]
+        self.median_evals = [[]] * len(crossovers)
+        self.success_rates = [[]] * len(crossovers)
+        self.fitness = [[]] * len(crossovers)
+        self.x = [[]] * len(crossovers)
+        self.y = [[]] * len(crossovers)
         self.xlabels = []
         self.plot_titles = []
 
@@ -82,7 +82,7 @@ class PlotResults:
 
         self.fig.suptitle("Baseline results")
 
-        for p in range(3):
+        for p in range(len(crossovers)):
             self.axis[p, cx_num].bar(self.x[cx_num], self.y[p], 0.8, color='green')
             self.axis[p, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
             self.axis[p, cx_num].tick_params(rotation=45)
@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
     # init:
     if plot:
-        draw = PlotResults(n, crossovers)
+        draw = PlotResults(crossovers)
     else:
         draw = None
 
