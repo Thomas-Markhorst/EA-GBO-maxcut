@@ -59,11 +59,11 @@ class PlotResults:
         self.fig, self.axis = plt.subplots(3, 3, figsize=(12, 6), dpi=100)
         plt.ion()
         self.fig.show()
-        self.median_evals = [[]] * len(crossovers)
-        self.success_rates = [[]] * len(crossovers)
-        self.fitness = [[]] * len(crossovers)
-        self.x = [[]] * len(crossovers)
-        self.y = [[]] * len(crossovers)
+        self.median_evals = [[] for _ in range(len(crossovers))]
+        self.success_rates = [[] for _ in range(len(crossovers))]
+        self.fitness = [[] for _ in range(len(crossovers))]
+        self.x = [[] for _ in range(len(crossovers))]
+        self.y = [[] for _ in range(len(crossovers))]
         self.xlabels = []
         self.plot_titles = []
 
@@ -72,8 +72,10 @@ class PlotResults:
         self.success_rates[cx_num].append(success)
         self.fitness[cx_num].append(fitness)
 
+        print(self.median_evals)
+
         self.x[cx_num].append(inst_num)
-        self.y = [self.median_evals[cx_num], self.success_rates[cx_num], self.fitness[cx_num]]
+        self.y[cx_num] = [self.median_evals[cx_num], self.success_rates[cx_num], self.fitness[cx_num]]
         self.plot_titles = ["Median evaluations of " + crossovers[cx_num], "Success rate of " + crossovers[cx_num],
                             "Best fitness of " + crossovers[cx_num]]
 
@@ -83,10 +85,25 @@ class PlotResults:
         self.fig.suptitle("Baseline results")
 
         for p in range(len(crossovers)):
-            self.axis[p, cx_num].bar(self.x[cx_num], self.y[p], 0.8, color='green')
+            print(self.y[cx_num][p])
+            self.axis[p, cx_num].bar(self.x[cx_num], self.y[cx_num][p], 0.8, color='green')
             self.axis[p, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
             self.axis[p, cx_num].tick_params(rotation=45)
             self.axis[p, cx_num].set_title(self.plot_titles[p])
+        """
+        self.axis[0, cx_num].bar(self.x[cx_num], self.median_evals[cx_num], 0.8, color='green')
+        self.axis[0, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
+        self.axis[0, cx_num].tick_params(rotation=45)
+        self.axis[0, cx_num].set_title(self.plot_titles[0])
+        self.axis[1, cx_num].bar(self.x[cx_num], self.success_rates[cx_num], 0.8, color='green')
+        self.axis[1, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
+        self.axis[1, cx_num].tick_params(rotation=45)
+        self.axis[1, cx_num].set_title(self.plot_titles[1])
+        self.axis[2, cx_num].bar(self.x[cx_num], self.fitness[cx_num], 0.8, color='green')
+        self.axis[2, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
+        self.axis[2, cx_num].tick_params(rotation=45)
+        self.axis[2, cx_num].set_title(self.plot_titles[2])
+        """
 
         plt.tight_layout()
         plt.draw()
