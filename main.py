@@ -31,7 +31,7 @@ all_instances = np.array([
     ["E", "160i01", "maxcut-instances/setE/n0000160i01.txt"]
 ])
 
-easy_instances = np.array([
+instances = np.array([
     ["A", "06i01", "maxcut-instances/setA/n0000006i01.txt"],
     ["B", "09i01", "maxcut-instances/setB/n0000009i01.txt"],
     ["C", "06i01", "maxcut-instances/setC/n0000006i01.txt"],
@@ -39,7 +39,7 @@ easy_instances = np.array([
     ["E", "10i01", "maxcut-instances/setE/n0000010i01.txt"]
 ])
 
-instances = np.array([
+test_instances = np.array([
     ["D", "10i01", "maxcut-instances/setD/n0000010i01.txt"],
     ["D", "20i01", "maxcut-instances/setD/n0000020i01.txt"],
     ["D", "40i01", "maxcut-instances/setD/n0000040i01.txt"],
@@ -56,14 +56,17 @@ instances = np.array([
 class PlotResults:
 
     def __init__(self, crossovers):
-        self.fig, self.axis = plt.subplots(3, 3, figsize=(12, 6), dpi=100)
+        self.fig, self.axis = plt.subplots(3, 1, figsize=(6, 12), dpi=100)
         plt.ion()
         self.fig.show()
         self.median_evals = [[] for _ in range(len(crossovers))]
         self.success_rates = [[] for _ in range(len(crossovers))]
         self.fitness = [[] for _ in range(len(crossovers))]
-        self.x = [[] for _ in range(len(crossovers))]
+        self.x = []
         self.y = [[] for _ in range(len(crossovers))]
+        self.width = 0.3
+        self.width_scales = [-self.width, 0, self.width]
+        self.colors = ["green", "blue", "yellow"]
         self.xlabels = []
         self.plot_titles = []
 
@@ -74,35 +77,43 @@ class PlotResults:
 
         print(self.median_evals)
 
-        self.x[cx_num].append(inst_num)
+        if cx_num == 0:
+            self.xlabels.append(instance)
+
+        self.x = np.arange(len(self.xlabels))
+        print((self.x - (3 / 2) * self.width))
+        print(self.median_evals[0])
         self.y[cx_num] = [self.median_evals[cx_num], self.success_rates[cx_num], self.fitness[cx_num]]
         self.plot_titles = ["Median evaluations of " + crossovers[cx_num], "Success rate of " + crossovers[cx_num],
                             "Best fitness of " + crossovers[cx_num]]
 
-        if cx_num == 0:
-            self.xlabels.append(instance)
-
         self.fig.suptitle("Baseline results")
 
         for p in range(len(crossovers)):
-            print(self.y[cx_num][p])
-            self.axis[p, cx_num].bar(self.x[cx_num], self.y[cx_num][p], 0.8, color='green')
-            self.axis[p, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
-            self.axis[p, cx_num].tick_params(rotation=45)
-            self.axis[p, cx_num].set_title(self.plot_titles[p])
+            self.axis[p].bar(self.x + self.width_scales[cx_num], self.y[cx_num][p], self.width,
+                         color=self.colors[cx_num], label=crossovers[cx_num])
+            self.axis[p].set(xticks=self.x, xticklabels=self.xlabels)
+            self.axis[p].tick_params(rotation=45)
+            if inst_num < 1:
+                self.axis[p].legend()
+
+
         """
-        self.axis[0, cx_num].bar(self.x[cx_num], self.median_evals[cx_num], 0.8, color='green')
-        self.axis[0, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
-        self.axis[0, cx_num].tick_params(rotation=45)
-        self.axis[0, cx_num].set_title(self.plot_titles[0])
-        self.axis[1, cx_num].bar(self.x[cx_num], self.success_rates[cx_num], 0.8, color='green')
-        self.axis[1, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
-        self.axis[1, cx_num].tick_params(rotation=45)
-        self.axis[1, cx_num].set_title(self.plot_titles[1])
-        self.axis[2, cx_num].bar(self.x[cx_num], self.fitness[cx_num], 0.8, color='green')
-        self.axis[2, cx_num].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
-        self.axis[2, cx_num].tick_params(rotation=45)
-        self.axis[2, cx_num].set_title(self.plot_titles[2])
+
+        self.axis[0].bar(self.x + self.width_scales[cx_num], self.median_evals[cx_num], self.width,
+                         color=self.colors[cx_num], label=crossovers[cx_num])
+        self.axis[0].set(xticks=self.x, xticklabels=self.xlabels)
+        self.axis[0].tick_params(rotation=45)
+
+        self.axis[0, 0].set_title(self.plot_titles[0])
+        self.axis[1, 0].bar(self.x[cx_num], self.success_rates[cx_num], 0.8, color='green')
+        self.axis[1, 0].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
+        self.axis[1, 0].tick_params(rotation=45)
+        self.axis[1, 0].set_title(self.plot_titles[1])
+        self.axis[2, 0].bar(self.x[cx_num], self.fitness[cx_num], 0.8, color='green')
+        self.axis[2, 0].set(xticks=np.arange(len(self.xlabels)), xticklabels=self.xlabels)
+        self.axis[2, 0].tick_params(rotation=45)
+        self.axis[2, 0].set_title(self.plot_titles[2])
         """
 
         plt.tight_layout()
