@@ -103,14 +103,14 @@ class BarPlot:
         self.success_rates[cx_num].append(success)
         self.fitness[cx_num].append(fitness)
 
-        print(self.median_evals)
+        # print(self.median_evals)
 
         if cx_num == 0:
             self.xlabels.append(instance)
 
         self.x = np.arange(len(self.xlabels))
-        print((self.x - (3 / 2) * self.width))
-        print(self.median_evals[0])
+        # print((self.x - (3 / 2) * self.width))
+        # print(self.median_evals[0])
         self.y[cx_num] = [np.log(self.median_evals[cx_num]), self.success_rates[cx_num], np.log(self.fitness[cx_num])]
         self.plot_titles = ["log median evaluations of " + self.crossovers[cx_num], "Success rate of " + self.crossovers[cx_num],
                             "Log best fitness of " + self.crossovers[cx_num]]
