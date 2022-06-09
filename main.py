@@ -83,8 +83,7 @@ if __name__ == "__main__":
         for w in range(num_populations):
             if 100000 % population[w] != 0 or population[w] % 2 != 0:
                 if w >= 1:
-                    if population[w-1] >= population[w]:
-                        population[w] = population[w-1] + 1
+                    population[w] = population[w-1] + 1
                 while 100000 % population[w] != 0 or population[w] % 2 != 0:
                     population[w] += 1
         print(population)
@@ -126,11 +125,13 @@ if __name__ == "__main__":
 
                 if bar_plot and p == num_populations-1:
                     # inst_num, instance, crossovers, cx_num, median, success, fitness
+                    print("Drawing bar plot")
                     draw_bar.make_bar_plots(s, instances[s, 0] + instances[s, 1],
                                             crossovers.index(cx), opt_medianeval[crossovers.index(cx)],
                                             opt_succesrate[crossovers.index(cx)], opt_fitness[crossovers.index(cx)])
 
                 if pop_plot:
+                    print("drawing pop plot")
                     # instance, cx_num, median, success, fitness, population):
                     draw_plots.make_plots(instances[s, 0] + instances[s, 1], crossovers.index(cx),
                                     np.median(num_evaluations_list), num_success/num_runs, best_fitness, population_size)

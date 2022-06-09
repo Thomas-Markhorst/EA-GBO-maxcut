@@ -133,3 +133,4 @@ class BarPlot:
         if inst_num+1 == self.num_instances:
             plt.savefig("./plots/bar_plot.pdf")
 
+
