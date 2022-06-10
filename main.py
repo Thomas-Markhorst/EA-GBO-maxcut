@@ -31,26 +31,26 @@ all_instances = np.array([
     ["E", "160i01", "maxcut-instances/setE/n0000160i01.txt"]
 ])
 
-instances = np.array([
+# instances = np.array([
     # ["A", 6, "maxcut-instances/setA/n0000006i01.txt"],
     # ["B", 9, "maxcut-instances/setB/n0000009i01.txt"],
     # ["C", 6, "maxcut-instances/setC/n0000006i01.txt"],
-    ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
-    ["E", 10, "maxcut-instances/setE/n0000010i01.txt"]
-])
-
-# instances = np.array([
-#     ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
-#     ["D", 20, "maxcut-instances/setD/n0000020i01.txt"],
-#     ["D", 40, "maxcut-instances/setD/n0000040i01.txt"],
-#     ["D", 80, "maxcut-instances/setD/n0000080i01.txt"],
-#     ["D", 160, "maxcut-instances/setD/n0000160i01.txt"],
-#     ["E", 10, "maxcut-instances/setE/n0000010i01.txt"],
-#     ["E", 20, "maxcut-instances/setE/n0000020i01.txt"],
-#     ["E", 40, "maxcut-instances/setE/n0000040i01.txt"],
-#     ["E", 80, "maxcut-instances/setE/n0000080i01.txt"],
-#     ["E", 160, "maxcut-instances/setE/n0000160i01.txt"]
+    # ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
+    # ["E", 10, "maxcut-instances/setE/n0000010i01.txt"]
 # ])
+
+instances = np.array([
+     ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
+     ["D", 20, "maxcut-instances/setD/n0000020i01.txt"],
+     ["D", 40, "maxcut-instances/setD/n0000040i01.txt"],
+     ["D", 80, "maxcut-instances/setD/n0000080i01.txt"],
+     ["D", 160, "maxcut-instances/setD/n0000160i01.txt"],
+     ["E", 10, "maxcut-instances/setE/n0000010i01.txt"],
+     ["E", 20, "maxcut-instances/setE/n0000020i01.txt"],
+     ["E", 40, "maxcut-instances/setE/n0000040i01.txt"],
+     ["E", 80, "maxcut-instances/setE/n0000080i01.txt"],
+     ["E", 160, "maxcut-instances/setE/n0000160i01.txt"]
+])
 
 
 if __name__ == "__main__":
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         opt_medianeval = np.zeros(len(crossovers))
         opt_fitness = np.zeros(len(crossovers))
 
-        population = np.round(10*np.linspace(1, 3, num_populations)*int(0.5*int(instances[s, 1]))-1*np.ones(num_populations))
+        population = np.round(11*np.linspace(1, 3, num_populations)*int(0.5*int(instances[s, 1]))+50*np.ones(num_populations))
         print(population)
         for w in range(num_populations):
             if 100000 % population[w] != 0 or population[w] % 2 != 0:
