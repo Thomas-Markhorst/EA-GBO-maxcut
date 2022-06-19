@@ -31,20 +31,28 @@ all_instances = np.array([
     ["E", "160i01", "maxcut-instances/setE/n0000160i01.txt"]
 ])
 
-# instances = np.array([
-    # ["A", 6, "maxcut-instances/setA/n0000006i01.txt"],
-    # ["B", 9, "maxcut-instances/setB/n0000009i01.txt"],
-    # ["C", 6, "maxcut-instances/setC/n0000006i01.txt"],
-    # ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
-    # ["E", 10, "maxcut-instances/setE/n0000010i01.txt"]
-# ])
+""""
+instances = np.array([
+    ["A", 6, "maxcut-instances/setA/n0000006i01.txt"],
+    ["B", 9, "maxcut-instances/setB/n0000009i01.txt"],
+    ["C", 6, "maxcut-instances/setC/n0000006i01.txt"],
+    ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
+    ["E", 10, "maxcut-instances/setE/n0000010i01.txt"]
+])
+"""
 
+"""
 instances = np.array([
      ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
      ["D", 20, "maxcut-instances/setD/n0000020i01.txt"],
      ["D", 40, "maxcut-instances/setD/n0000040i01.txt"],
      ["D", 80, "maxcut-instances/setD/n0000080i01.txt"],
-     ["D", 160, "maxcut-instances/setD/n0000160i01.txt"],
+     ["D", 160, "maxcut-instances/setD/n0000160i01.txt"]
+])
+
+"""
+
+instances = np.array([
      ["E", 10, "maxcut-instances/setE/n0000010i01.txt"],
      ["E", 20, "maxcut-instances/setE/n0000020i01.txt"],
      ["E", 40, "maxcut-instances/setE/n0000040i01.txt"],
@@ -95,24 +103,27 @@ if __name__ == "__main__":
 
             for cx in crossovers:
                 num_evaluations_list = []
+                fitness_list = []
                 num_runs = 30
                 num_success = 0
                 best_fitness = 0
 
                 for i in range(num_runs):
                     fitness = FitnessFunction.MaxCut(inst)
-                    genetic_algorithm = GeneticAlgorithm(fitness, population_size, variation=cx, evaluation_budget=100000,
-                                                         verbose=False)
+                    genetic_algorithm = GeneticAlgorithm(fitness, population_size, variation=cx,
+                                                         evaluation_budget=100000, verbose=False)
                     best_fitness, num_evaluations = genetic_algorithm.run()
+
+                    # append to arrays for plotting
+                    fitness_list.append(best_fitness/fitness.value_to_reach)
+                    num_evaluations_list.append(num_evaluations)
 
                     if best_fitness == fitness.value_to_reach:
                         num_success += 1
 
-                    num_evaluations_list.append(num_evaluations)
-
                 print("Instance {}, Crossover method {}".format(instances[s, 0] + instances[s, 1], cx))
                 print("{}/{} runs successful".format(num_success, num_runs))
-                print("{} evaluations (median)".format(np.median(num_evaluations_list)))
+                print("{} evaluations (median)".format(num_evaluations_list))
                 print("{} best fitness".format(best_fitness))
 
                 # set optimals, should it be optimal over all population sizes?
@@ -120,8 +131,8 @@ if __name__ == "__main__":
                     opt_medianeval[crossovers.index(cx)] = np.median(num_evaluations_list)
                 if num_success / num_runs > opt_succesrate[crossovers.index(cx)]:
                     opt_succesrate[crossovers.index(cx)] = num_success / num_runs
-                if best_fitness > opt_fitness[crossovers.index(cx)]:
-                    opt_fitness[crossovers.index(cx)] = best_fitness
+                if np.median(fitness_list) > opt_fitness[crossovers.index(cx)]:
+                    opt_fitness[crossovers.index(cx)] = np.median(fitness_list)
 
                 if bar_plot and p == num_populations-1:
                     # inst_num, instance, crossovers, cx_num, median, success, fitness
@@ -134,7 +145,9 @@ if __name__ == "__main__":
                     print("drawing pop plot")
                     # instance, cx_num, median, success, fitness, population):
                     draw_plots.make_plots(instances[s, 0] + instances[s, 1], crossovers.index(cx),
-                                    np.median(num_evaluations_list), num_success/num_runs, best_fitness, population_size)
+                                          np.median(num_evaluations_list), np.std(num_evaluations_list),
+                                          num_success/num_runs, np.median(fitness_list), np.std(fitness_list),
+                                          population_size)
 
                 if log_file:
                     with open("output-{}.txt".format(cx), "w") as f:

@@ -29,34 +29,46 @@ class PopPlot:
         self.instance = ""
         self.crossovers = crossovers
         self.median_evals = [[] for _ in range(len(self.crossovers))]
+        self.std_evals = [[] for _ in range(len(self.crossovers))]
         self.success_rates = [[] for _ in range(len(self.crossovers))]
-        self.fitness = [[] for _ in range(len(self.crossovers))]
+        self.median_fitness = [[] for _ in range(len(self.crossovers))]
+        self.std_fitness = [[] for _ in range(len(self.crossovers))]
         self.num_populations = num_populations
         self.x = []
         self.y = [[] for _ in range(len(crossovers))]
+        self.std = [[] for _ in range(len(crossovers))]
         self.plot_titles = []
         self.colors = ["g", "b", "r"]
 
-    def make_plots(self, instance, cx_num, median, success, fitness, population):
+    def make_plots(self, instance, cx_num, median_eval, std_eval, success, median_fitness, std_fitness, population):
         self.instance = instance
-        self.median_evals[cx_num].append(median)
+        self.median_evals[cx_num].append(median_eval)
+        self.std_evals[cx_num].append(std_eval)
         self.success_rates[cx_num].append(success)
-        self.fitness[cx_num].append(fitness)
+        self.median_fitness[cx_num].append(median_fitness)
+        self.std_fitness[cx_num].append(std_fitness)
 
-        self.y[cx_num] = [self.median_evals[cx_num], self.success_rates[cx_num], self.fitness[cx_num]]
+        print(self.median_evals)
+
+        self.y[cx_num] = [self.median_evals[cx_num], self.success_rates[cx_num], self.median_fitness[cx_num]]
+        self.std[cx_num] = [self.std_evals[cx_num], [0]*len(self.success_rates[cx_num]), self.std_fitness[cx_num]]
 
         self.fig.suptitle("Instance {}: results for different population sizes".format(self.instance))
-        self.plot_titles = ["Median evaluations of " + self.crossovers[cx_num], "Success rate of " +
-                            self.crossovers[cx_num], "Best fitness of " + self.crossovers[cx_num]]
+        self.plot_titles = ["Median evaluations", "Success rate", "Best normalized fitness"]
 
         if cx_num == len(self.crossovers)-1:
+            print(self.y)
             self.x.append(population)
             for j in range(3):
                 for r in range(len(self.crossovers)):
-                    self.axis[j].plot(self.x, self.y[r][j], self.colors[r], label=self.crossovers[r])
+                    self.axis[j].plot(self.x, self.y[r][j], self.colors[r], label=self.crossovers[r], marker='x')
+                    if len(self.x) == self.num_populations:
+                        std_min = [median - std for (median, std) in zip(self.y[r][j], self.std[r][j])]
+                        std_max = [median + std for (median, std) in zip(self.y[r][j], self.std[r][j])]
+                        self.axis[j].fill_between(self.x, std_min, std_max, alpha=0.3, facecolor=self.colors[r])
                     self.axis[j].set_title(self.plot_titles[j])
                     if len(self.x) < 2:
-                        self.axis[j].legend()
+                        self.axis[j].legend(loc=1)
                         self.axis[j].set_xlabel("Population size")
 
             plt.tight_layout()
@@ -111,9 +123,8 @@ class BarPlot:
         self.x = np.arange(len(self.xlabels))
         # print((self.x - (3 / 2) * self.width))
         # print(self.median_evals[0])
-        self.y[cx_num] = [np.log(self.median_evals[cx_num]), self.success_rates[cx_num], np.log(self.fitness[cx_num])]
-        self.plot_titles = ["log median evaluations of " + self.crossovers[cx_num], "Success rate of " + self.crossovers[cx_num],
-                            "Log best fitness of " + self.crossovers[cx_num]]
+        self.y[cx_num] = [np.log(self.median_evals[cx_num]), self.success_rates[cx_num], self.fitness[cx_num]]
+        self.plot_titles = ["log median evaluations", "Success rate", "Median normalized fitness"]
 
         self.fig.suptitle("Baseline results")
 
