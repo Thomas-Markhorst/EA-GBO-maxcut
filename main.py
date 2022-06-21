@@ -41,7 +41,7 @@ instances = np.array([
 ])
 """
 
-"""
+
 instances = np.array([
      ["D", 10, "maxcut-instances/setD/n0000010i01.txt"],
      ["D", 20, "maxcut-instances/setD/n0000020i01.txt"],
@@ -59,7 +59,7 @@ instances = np.array([
      ["E", 80, "maxcut-instances/setE/n0000080i01.txt"],
      ["E", 160, "maxcut-instances/setE/n0000160i01.txt"]
 ])
-
+"""
 
 if __name__ == "__main__":
     # settings:
@@ -134,13 +134,6 @@ if __name__ == "__main__":
                 if np.median(fitness_list) > opt_fitness[crossovers.index(cx)]:
                     opt_fitness[crossovers.index(cx)] = np.median(fitness_list)
 
-                if bar_plot and p == num_populations-1:
-                    # inst_num, instance, crossovers, cx_num, median, success, fitness
-                    print("Drawing bar plot")
-                    draw_bar.make_bar_plots(s, instances[s, 0] + instances[s, 1],
-                                            crossovers.index(cx), opt_medianeval[crossovers.index(cx)],
-                                            opt_succesrate[crossovers.index(cx)], opt_fitness[crossovers.index(cx)])
-
                 if pop_plot:
                     print("drawing pop plot")
                     # instance, cx_num, median, success, fitness, population):
@@ -148,6 +141,13 @@ if __name__ == "__main__":
                                           np.median(num_evaluations_list), np.std(num_evaluations_list),
                                           num_success/num_runs, np.median(fitness_list), np.std(fitness_list),
                                           population_size)
+
+                if bar_plot and p == num_populations-1:
+                    # inst_num, instance, crossovers, cx_num, median, success, fitness
+                    print("Drawing bar plot")
+                    draw_bar.make_bar_plots(s, instances[s, 0] + instances[s, 1],
+                                            crossovers.index(cx), opt_medianeval[crossovers.index(cx)],
+                                            opt_succesrate[crossovers.index(cx)], opt_fitness[crossovers.index(cx)])
 
                 if log_file:
                     with open("output-{}.txt".format(cx), "w") as f:

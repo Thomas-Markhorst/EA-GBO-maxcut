@@ -80,6 +80,7 @@ class PopPlot:
 
     def reset_save_plot(self):
         plt.savefig("./plots/pop_plot_{}.pdf".format(self.instance))
+        # plt.cla()
 
         # self.fig, self.axis = plt.subplots(3, 1, figsize=(6, 12), dpi=100)
         # plt.ion()
@@ -143,5 +144,6 @@ class BarPlot:
 
         if inst_num+1 == self.num_instances:
             plt.savefig("./plots/bar_plot.pdf")
+            # plt.cla()
 
 
