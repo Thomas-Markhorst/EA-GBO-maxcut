@@ -18,7 +18,7 @@ class GeneticAlgorithm:
 		self.population = []
 		self.number_of_generations = 0
 		self.verbose = False
-		self.print_final_results = True
+		self.print_final_results = False
 
 		if "verbose" in options:
 			self.verbose = options["verbose"]
@@ -71,7 +71,7 @@ class GeneticAlgorithm:
 				offspring = self.make_offspring()
 				selection = self.make_selection(offspring)
 				self.population = selection
-				
+
 			if( self.verbose ):
 				self.print_statistics()
 
